@@ -6,11 +6,19 @@ package com.fabiangomez.persistence.entity;
 
 import java.io.Serializable;
 import java.util.Objects;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 /**
  *
  * @author FABIANG
  */
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class OrderItemId implements Serializable {
 
     private Integer idOrder;
