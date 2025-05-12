@@ -1,13 +1,7 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.fabiangomez.web.controller;
 
 import com.fabiangomez.persistence.entity.PizzaEntity;
 import com.fabiangomez.service.PizzaService;
-import com.fabiangomez.service.impl.PizzaServiceJdbcTemplate;
-import com.fabiangomez.service.impl.PizzaServiceListCrudRepository;
 import java.net.URI;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,7 +46,7 @@ public class PizzaController {
     @PostMapping
     public ResponseEntity<PizzaEntity> save(@RequestBody PizzaEntity newPizza) {
         PizzaEntity savedPizza = this.pizzaService.save(newPizza);
-        URI location = URI.create(String.format("api/pizzas/%d", savedPizza.getIdPizza()));
+        URI location = URI.create(String.format("/api/pizzas/%d", savedPizza.getIdPizza()));
         return ResponseEntity.created(location).body(savedPizza);
     }
 
