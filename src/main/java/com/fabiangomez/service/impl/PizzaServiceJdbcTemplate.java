@@ -2,9 +2,10 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package com.fabiangomez.service;
+package com.fabiangomez.service.impl;
 
 import com.fabiangomez.persistence.entity.PizzaEntity;
+import com.fabiangomez.service.PizzaService;
 import java.sql.PreparedStatement;
 import java.sql.Statement;
 import java.util.List;
@@ -22,7 +23,7 @@ import org.springframework.stereotype.Service;
  * @author FABIANG
  */
 @Service
-public class PizzaServiceJdbcTemplate {
+public class PizzaServiceJdbcTemplate implements PizzaService {
 
     private final JdbcTemplate jdbcTemplate;
 
@@ -31,13 +32,15 @@ public class PizzaServiceJdbcTemplate {
         this.jdbcTemplate = jdbcTemplate;
     }
 
+    @Override
     public List<PizzaEntity> getAll() {
         String sql = "SELECT * FROM PIZZA";
         return this.jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(PizzaEntity.class));
 
     }
 
-    public Optional<PizzaEntity> get(Integer id) {
+    @Override
+    public Optional<PizzaEntity> getById(Integer id) {
         String sql = "SELECT * FROM PIZZA WHERE id_pizza = ?";
 
         try {
@@ -52,6 +55,7 @@ public class PizzaServiceJdbcTemplate {
         }
     }
 
+    @Override
     public PizzaEntity save(PizzaEntity pizza) {
         String sql = "INSERT INTO PIZZA (name, description, price, vegetarian, vegan, available) VALUES(?,?,?,?,?,?)";
 
@@ -72,12 +76,15 @@ public class PizzaServiceJdbcTemplate {
         );
 
         Number generatedId = keyHolder.getKey();
-        pizza.setIdPizza(generatedId.intValue());
+        if (generatedId != null) {
+            pizza.setIdPizza(generatedId.intValue());
+        }
 
         return pizza;
 
     }
 
+    @Override
     public Optional<PizzaEntity> update(PizzaEntity pizza, Integer id) {
         String sql = "UPDATE PIZZA SET name = ?, description = ?, price = ?, vegetarian = ?, vegan = ?, available = ? WHERE id_pizza = ?";
 
@@ -100,6 +107,7 @@ public class PizzaServiceJdbcTemplate {
         }
     }
 
+    @Override
     public boolean delete(Integer id) {
         String sql = "DELETE FROM PIZZA WHERE id_pizza = ?";
 
@@ -107,4 +115,5 @@ public class PizzaServiceJdbcTemplate {
 
         return rowsAffect > 0;
     }
+
 }

@@ -5,10 +5,13 @@
 package com.fabiangomez.web.controller;
 
 import com.fabiangomez.persistence.entity.PizzaEntity;
-import com.fabiangomez.service.PizzaServiceJdbcTemplate;
+import com.fabiangomez.service.PizzaService;
+import com.fabiangomez.service.impl.PizzaServiceJdbcTemplate;
+import com.fabiangomez.service.impl.PizzaServiceListCrudRepository;
 import java.net.URI;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,10 +30,10 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/pizzas")
 public class PizzaController {
 
-    private final PizzaServiceJdbcTemplate pizzaService;
+    private final PizzaService pizzaService;
 
     @Autowired
-    public PizzaController(PizzaServiceJdbcTemplate pizzaService) {
+    public PizzaController(@Qualifier("pizzaServiceListCrudRepository")PizzaService pizzaService) {
         this.pizzaService = pizzaService;
     }
 
@@ -41,7 +44,7 @@ public class PizzaController {
 
     @GetMapping("/{id}")
     public ResponseEntity<PizzaEntity> get(@PathVariable Integer id) {
-        return this.pizzaService.get(id)
+        return this.pizzaService.getById(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
